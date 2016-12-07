@@ -1,34 +1,36 @@
-<div layout="vertical" layout-fill>
+<div ng-init="currentList = 'country'" class="col-md-8 col-md-offset-2">
+  <h2 class="text-center">
+    Beijing 2008 Olympics Medals
+  </h2>
+  <div class="text-center">
+    <md-button class="md-raised md-small" ng-click="currentList = 'country'" ng-class="{'md-primary' : currentList == 'country'}">Country</md-button>
+    <md-button class="md-raised md-small" ng-click="currentList = 'athlete'" ng-class="{'md-primary' : currentList == 'athlete'}">Athlete</md-button>
+    <!--md-button class="md-raised md-small" ng-click="currentList = 'event'" ng-class="{'md-primary' : currentList == 'event'}">Event</md-button-->
+  </div>
 
-  <md-content>
-    <header>
-      <acme-navbar creation-date="main.creationDate"></acme-navbar>
-    </header>
-
-    <section class="jumbotron">
-      <h1>'Allo, 'Allo!</h1>
-      <p class="lead">
-        <img src="assets/images/yeoman.png" alt="I'm Yeoman"><br>
-        Always a pleasure scaffolding your apps.
-      </p>
-      <md-button class="md-raised animated infinite" ng-class="main.classAnimation" ng-click="main.showToastr()">Splendid Toastr</md-button>
-      <p>
-        With ♥ thanks to the contributions of<acme-malarkey extra-values="['Yeoman', 'Gulp', 'Angular']"></acme-malarkey>
-      </p>
-    </section>
-
-    <div class="techs" layout-align="center">
-      <md-card ng-repeat="awesomeThing in main.awesomeThings | orderBy:'rank'">
-        <md-card-content>
-          <img class="pull-right" ng-src="assets/images/{{ awesomeThing.logo }}" alt="{{ awesomeThing.title }}">
-          <h3 class="md-title">{{ awesomeThing.title }}</h3>
-          <p>{{ awesomeThing.description }}</p>
-        </md-card-content>
-        <div class="md-action-buttons">
-          <md-button ng-href="{{ awesomeThing.url }}">Website</md-button>
-        </div>
-      </md-card>
-    </div>
-  </md-content>
-
+  <!-- exact table from live demo -->
+  <md-table-container>
+    <table md-table>
+      <thead md-head md-order="query.order" md-on-reorder="getDesserts">
+        <tr md-row>
+          <th md-column></th>
+          <th md-column width="70%" class="capitalize">{{currentList}}</th>
+          <th md-column>Gold</th>
+          <th md-column>Silver</th>
+          <th md-column>Bronze</th>
+          <th md-column>Total</th>
+        </tr>
+      </thead>
+      <tbody md-body>
+        <tr md-row ng-repeat="item in main.manager[currentList] | orderObjectBy: 'position' : true">
+          <td md-cell>{{$index + 1}}</td>
+          <td md-cell>{{item.id}}</td>
+          <td md-cell>{{item.medals.Gold || 0}}</td>
+          <td md-cell>{{item.medals.Silver || 0}}</td>
+          <td md-cell>{{item.medals.Bronze || 0}}</td>
+          <td md-cell>{{(item.medals.Gold + item.medals.Silver + item.medals.Bronze) || 0}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </md-table-container>
 </div>

@@ -1,37 +1,14 @@
-import { WebDevTecService, ITecThing } from '../components/webDevTec/webDevTec.service';
+import { ScoreBoard } from '../entities/scoreBoard/score-board.service';
+import { IScoreEntity } from '../entities/scoreBoard/mock';
+import {Manager } from '../entities/manager';
 
 export class MainController {
-  public awesomeThings: ITecThing[];
-  public webDevTec: WebDevTecService;
-  public classAnimation: string;
-  public creationDate: number;
-  public toastr: any;
-
+  public manager : Manager;
   /* @ngInject */
-  constructor ($timeout: angular.ITimeoutService, webDevTec: WebDevTecService, toastr: any) {
-    this.awesomeThings = new Array();
-    this.webDevTec = webDevTec;
-    this.classAnimation = '';
-    this.creationDate = 1481129179908;
-    this.toastr = toastr;
-    this.activate($timeout);
-  }
-
-  /** @ngInject */
-  activate($timeout: angular.ITimeoutService) {
-    this.getWebDevTec();
-
-    $timeout(() => {
-      this.classAnimation = 'rubberBand';
-    }, 4000);
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
-  }
-
-  getWebDevTec() {
-    this.awesomeThings = this.webDevTec.tec;
+  constructor(manager: Manager, public $mdDialog: ng.material.IDialogService, scoreBoard: ScoreBoard) {
+    this.manager = manager;
+    scoreBoard.get().then((data: IScoreEntity[]) => {
+      this.manager.populateClasses(data);
+    });
   }
 }
